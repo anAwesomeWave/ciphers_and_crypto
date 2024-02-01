@@ -21,7 +21,7 @@ class Permutation:
         reversed_perm = [0 for _ in range(len(self.permutation))]
         for i in range(len(self.permutation)):
             reversed_perm[self.permutation[i]] = i
-        return reversed_perm
+        return Permutation(len(reversed_perm), reversed_perm)
 
 
 def str_to_array(text: str) -> list[int]:

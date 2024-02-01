@@ -11,13 +11,22 @@ class SubstitutionCipher:
         self.decryption_key = self.key.inversed_permutation()
 
     def encrypt(self, text):
-        pass
+        # Transform text to vector of indices
+        # Multiply it by key
+        # Transform this vector to ciphertext
+        arr = hps.str_to_array(text)  # transform text to array
+        arr = hps.Permutation(len(arr), arr)  # transform array to Permutation instance
+        return hps.arr_to_str(arr * self.key)  # return ciphertext
 
     def decrypt(self, ciphertext):
-        pass
+        arr = hps.str_to_array(ciphertext)
+        return hps.arr_to_str(hps.Permutation(len(arr), arr) * self.decryption_key)
 
 
 if __name__ == '__main__':
-    s = 'abacaba'
+    text = 'abacaba'
+    print(f'INITIAL TEXT: {text}')
     sc = SubstitutionCipher()
-    print(hps.str_to_array(s))
+    ciphertext = sc.encrypt(text)
+    print(f'CIPHERTEXT: {ciphertext}')
+    print(f'TEXT AFTER DECRYPTION: {sc.decrypt(ciphertext)}')
