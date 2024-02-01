@@ -5,9 +5,9 @@ class SubstitutionCipher:
     def __init__(self, key=None):
         """ create a pair of keys. The key can be provided. """
 
-        self.key = key
+        self.key = hps.Permutation(len(key), key)
         if key is None:
-            self.key = hps.Permutation(hps.LEN_OF_ENG_ALPHABET)
+            self.key = hps.Permutation(hps.ALPHABET_LEN)
         self.decryption_key = self.key.inversed_permutation()
 
     def encrypt(self, text):

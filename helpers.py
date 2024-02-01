@@ -1,6 +1,6 @@
 import random
 
-LEN_OF_ENG_ALPHABET = 26
+ALPHABET_LEN = 26
 
 
 class Permutation:
@@ -50,6 +50,27 @@ def arr_to_str(arr: list[int]) -> str:
     return ''.join(ans)
 
 
+def gcd(x, y):
+    if x == 0:
+        return y
+    return gcd(y % x, x)
+
+
+def gcd_extended(a: int, b: int, x: list[int], y: list[int]):
+    """https://e-maxx.ru/algo/diofant_2_equation"""
+
+    # x and y are lists, bcs I want to change them inside function
+    if a == 0:
+        x[0] = 0
+        y[0] = 1
+        return b
+    x1, y1 = [0], [0]
+    d = gcd_extended(b % a, a, x1, y1)
+    x[0] = y1[0] - (b // a) * x1[0]
+    y[0] = x1[0]
+    return d
+
+
 if __name__ == '__main__':
     a = Permutation(3)
     print(a)
@@ -59,6 +80,10 @@ if __name__ == '__main__':
     print(a * b)
     print(b.inversed_permutation())
 
+    a = [0]
+    b = [0]
+    print(gcd_extended(9, 26, a, b))
+    print(a)
 '''
 [3, 1, 2]
 
