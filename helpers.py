@@ -31,7 +31,7 @@ def str_to_array(text: str) -> list[int]:
 
         erase all non alphabet letters, and make all letters lowercased
     """
-    text.lower()  # make all letters lowercased for simplicity
+    text = text.lower()  # make all letters lowercased for simplicity
     symbols = []
     for sym in text:
         if sym.isalpha():

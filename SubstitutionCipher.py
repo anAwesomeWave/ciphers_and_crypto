@@ -24,7 +24,7 @@ class SubstitutionCipher:
 
 
 if __name__ == '__main__':
-    text = 'abacaba'
+    text = 'I LOV U'
     print(f'INITIAL TEXT: {text}')
     sc = SubstitutionCipher()
     ciphertext = sc.encrypt(text)
