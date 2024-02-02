@@ -4,7 +4,12 @@ ALPHABET_LEN = 26
 
 
 class Permutation:
-    def __init__(self, length, permutation_list=None):
+    def __init__(self, length=0, permutation_list=None):
+        if length == 0 and permutation_list is None:
+            raise TypeError('''
+                На вход ожидался хотя бы один из аргументов: 'length', 'permutation_list'
+            ''')
+
         self.permutation = permutation_list
         if self.permutation is None:
             self.permutation = [i for i in range(length)]
@@ -16,7 +21,7 @@ class Permutation:
     def __str__(self):
         return '[' + ' '.join([str(x) for x in self.permutation]) + ']'
 
-    def inversed_permutation(self):
+    def inverse_permutation(self):
         """ i -> p[i], reversed p[i] -> i """
         reversed_perm = [0 for _ in range(len(self.permutation))]
         for i in range(len(self.permutation)):
@@ -78,7 +83,7 @@ if __name__ == '__main__':
     b = Permutation(4, [1, 3, 2, 0])
     print(b)
     print(a * b)
-    print(b.inversed_permutation())
+    print(b.inverse_permutation())
 
     a = [0]
     b = [0]
