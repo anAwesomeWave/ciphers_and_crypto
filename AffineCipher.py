@@ -10,17 +10,21 @@ class AffineCipher:
         self.key_a = key_a
         self.key_b = key_b
 
+        if self.key_a is None:
+            self.key_a = choice([x for x in range(2, MOD) if hps.gcd(MOD, x) == 1])
+        if self.key_b is None:
+            self.key_b = randint(0, MOD - 1)  # random num from [0, MOD)
+        self.__get_decryption_key__()
+
+    def __get_decryption_key__(self):
+        """ initialize decryption key based on self.key_a and MOD"""
+
         '''
             decryption: gcd(key_a, MOD) = 1 -> по т. Безу 
                 key_a * x + MOD * y = 1 https://e-maxx.ru/algo/reverse_element
                 но % MOD, key_a * x = 1 (mod MOD)
                 x - обратное к key_a 
         '''
-
-        if self.key_a is None:
-            self.key_a = choice([x for x in range(2, MOD) if hps.gcd(MOD, x) == 1])
-        if self.key_b is None:
-            self.key_b = randint(0, MOD - 1)  # random num from [0, MOD)
 
         inv1 = [0]
         inv2 = [0]
@@ -42,6 +46,34 @@ class AffineCipher:
         for i in arr:
             ans.append((self.decryption_key_a * (i - self.key_b)) % MOD)
         return hps.arr_to_str(ans)
+
+
+class AffineRecCipher(AffineCipher):
+    def __init__(self, key_a1=None, key_b1=None, key_a2=None, key_b2=None):
+        super().__init__(key_a1, key_b1)
+        # initialize second pair of keys
+        self.key_a2 = key_a2
+        self.key_b2 = key_b2
+        if self.key_a2 is None:
+            self.key_a2 = choice([x for x in range(2, MOD) if hps.gcd(MOD, x) == 1])
+        if self.key_b2 is None:
+            self.key_b2 = randint(0, MOD - 1)  # random num from [0, MOD)
+        # store initial keys
+        self.initial_keys_a = (self.key_a, self.key_a2)
+        self.initial_keys_b = (self.key_b, self.key_b2)
+        self.iteration = 0  # which pair of keys we want to use
+        self.prev_keys = []
+
+    def generate_new_keys(self):
+        # лучше хранить 2 предыдущие пары ключей
+        if self.iteration == 0:
+            return
+        elif self.iteration == 1:
+            self.key_a,
+
+    def encrypt(self, text):
+        self.generate_new_keys()
+        super().encrypt(text)
 
 
 if __name__ == '__main__':
