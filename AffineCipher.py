@@ -84,6 +84,7 @@ class AffineRecCipher(AffineCipher):
         ans = []
         prev_keys = deque()
         for ind, char in enumerate(arr):
+            print(prev_keys)
             if ind == 0:
                 decryption_key = self.__get_decryption_key__(self.key_a)
                 prev_keys.append((decryption_key, self.key_b))
@@ -97,27 +98,34 @@ class AffineRecCipher(AffineCipher):
                 new_keys = ((old_keys[0] * prev_keys[-1][0]) % MOD, (old_keys[1] + prev_keys[-1][1]) % MOD)
                 ans.append(((char - new_keys[1]) * new_keys[0]) % MOD)
                 prev_keys.append(new_keys)
-
+        print(ans)
         return hps.arr_to_str(ans)
 
 
 if __name__ == '__main__':
-    ac = AffineCipher()
-    print(ac.key_a)
-    print(ac.key_b)
-    print(ac.decryption_key_a)
-    s = 'iloveu'
-    cs = ac.encrypt(s)
-    print(cs)
-    print(ac.decrypt(cs))
-    print('---------')
-    arc = AffineRecCipher()
-    print(arc.key_a)
-    print(arc.key_a2)
-    print(arc.key_b)
-    print(arc.key_b2)
-
-    cs = arc.encrypt(s)
-    print(cs)
-
-    print(arc.decrypt(cs))
+    # ac = AffineCipher()
+    # print(ac.key_a)
+    # print(ac.key_b)
+    # print(ac.decryption_key_a)
+    # s = 'iloveuа'
+    # cs = ac.encrypt(s)
+    # print(cs)
+    # print(ac.decrypt(cs))
+    # print('---------')
+    # arc = AffineRecCipher()
+    # print(arc.key_a)
+    # print(arc.key_a2)
+    # print(arc.key_b)
+    # print(arc.key_b2)
+    #
+    # cs = arc.encrypt(s)
+    # print(cs)
+    #
+    # print(arc.decrypt(cs))
+    ac = AffineRecCipher(1, 2, 3, 1)
+    text = "palindrome"
+    ct =ac.encrypt(text)
+    print(ct)
+    print(ac.decrypt(ct))
+    # print(ac.key_a)
+    # print(ac.decryption_key_a)
