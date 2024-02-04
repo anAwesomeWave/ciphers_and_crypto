@@ -76,7 +76,8 @@ class AffineRecCipher(AffineCipher):
                 new_keys = ((old_keys[0] * prev_keys[-1][0]) % MOD, (old_keys[1] + prev_keys[-1][1]) % MOD)
                 ans.append((char * new_keys[0] + new_keys[1]) % MOD)
                 prev_keys.append(new_keys)
-            print(prev_keys)
+            print(f'KEY A{ind}: {prev_keys[-1][0]}')
+            print(f'KEY B{ind}: {prev_keys[-1][1]}')
         return hps.arr_to_str(ans)
 
     def decrypt(self, ciphertext):
@@ -102,22 +103,44 @@ class AffineRecCipher(AffineCipher):
 
 
 if __name__ == '__main__':
-    ac = AffineCipher()
-    print(ac.key_a)
-    print(ac.key_b)
-    print(ac.decryption_key_a)
-    s = 'iloveu'
-    cs = ac.encrypt(s)
-    print(cs)
-    print(ac.decrypt(cs))
-    print('---------')
-    arc = AffineRecCipher()
-    print(arc.key_a)
-    print(arc.key_a2)
-    print(arc.key_b)
-    print(arc.key_b2)
+    # ac = AffineCipher()
+    # print(ac.key_a)
+    # print(ac.key_b)
+    # print(ac.decryption_key_a)
+    # s = 'iloveu'
+    # cs = ac.encrypt(s)
+    # print(cs)
+    # print(ac.decrypt(cs))
+    # print('---------')
+    # arc = AffineRecCipher()
+    # print(arc.key_a)
+    # print(arc.key_a2)
+    # print(arc.key_b)
+    # print(arc.key_b2)
+    #
+    # cs = arc.encrypt(s)
+    # print(cs)
+    #
+    # print(arc.decrypt(cs))
+    text = 'cryptography'
+    ac = AffineCipher(key_a=11, key_b=3)
+    print('-------AFFINE CIPHER-------')
+    print(f"INITIAL TEXT: {text}")
+    print(f"KEY A: {ac.key_a}")
+    print(f"KEY B: {ac.key_b}")
+    print(f"DECRYPTION KEY A: {ac.decryption_key_a}")
+    ciphertext = ac.encrypt(text)
+    print(f"CIPHERTEXT: {ciphertext}")
+    print(f"DECRYPTED TEXT: {ac.decrypt(ciphertext)}")
 
-    cs = arc.encrypt(s)
-    print(cs)
-
-    print(arc.decrypt(cs))
+    text_rec = 'palindrome'
+    print('---AFFINE RECURRENT CIPHER---')
+    print(f"INITIAL TEXT: {text_rec}")
+    arc = AffineRecCipher(1, 2, 3, 1)
+    # print(f'KEY A0: {arc.key_a}')
+    # print(f'KEY B0: {arc.key_b}')
+    # print(f'KEY A1: {arc.key_a2}')
+    # print(f'KEY B1: {arc.key_b2}')
+    ciphertext = arc.encrypt(text_rec)
+    print(f'CIPHERTEXT: {ciphertext}')
+    print(f"DECRYPTED TEXT: {arc.decrypt(ciphertext)}")

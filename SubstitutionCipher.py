@@ -8,7 +8,7 @@ class SubstitutionCipher:
         if key is None:
             self.key = hps.Permutation(hps.ALPHABET_LEN)
         else:
-            self.key = hps.Permutation(key)
+            self.key = hps.Permutation(permutation_list=key)
         self.decryption_key = self.key.inverse_permutation()
 
     def encrypt(self, text):
@@ -26,9 +26,11 @@ class SubstitutionCipher:
 
 
 if __name__ == '__main__':
-    text = 'I LOV U'
+    text = 'anagram'
     print(f'INITIAL TEXT: {text}')
-    sc = SubstitutionCipher()
+    sc = SubstitutionCipher([6, 2, 1, 7, 15, 3, 5, 4, 23, 9, 13, 8, 12, 25, 16, 11, 17, 19, 22, 14, 18, 21, 0, 10, 20, 24])
+    print(f"KEY: {sc.key}")
     ciphertext = sc.encrypt(text)
     print(f'CIPHERTEXT: {ciphertext}')
+    print(f'DECRYPTION KEY: {sc.decryption_key}')
     print(f'TEXT AFTER DECRYPTION: {sc.decrypt(ciphertext)}')
