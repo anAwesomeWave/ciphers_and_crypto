@@ -28,7 +28,7 @@ def break_affine(ciphertext, freq_native):
     for key_a in a_keys:
         for key_b in b_keys:
             ac = AffineCipher(key_a=key_a, key_b=key_b)
-            decrypted_text = ac.decrypt(ciphertext)
+            decrypted_text = ac.decrypt(ciphertext)  # здесь по факту используется decryption key, а не key a
 
             freq_decrypted = crypta_hps.freq_analysis_of_text(decrypted_text)
 
