@@ -21,8 +21,8 @@ class HillCipher:
         if self.inv_key is None:
             print('Ошибка, обратная матрицы не исчеслима')
             raise ValueError
-        print(self.key)
-        print(self.inv_key)
+        # print(self.key)
+        # print(self.inv_key)
 
     def get_random_matrix(self) -> np.ndarray:
         arr = np.random.randint(10, size=(self.chunk_len, self.chunk_len))
@@ -147,19 +147,25 @@ class HillCipher:
 #     y = np.append(y, encrypt(k, chunk))
 
 
-k = np.array([
-    [1, 5, 1],
-    [3, 9, 4],
-    [9, 4, 6]
-])
 
-hc = HillCipher(k, 3)
-text = 'concurrency'
+if __name__ == '__main__':
+    k = np.array([
+        [1, 5, 1],
+        [3, 9, 4],
+        [9, 4, 6]
+    ])
+    print(f'ENCRYPTION KEY: \n{k}')
+    print('-----')
+    hc = HillCipher(k, 3)
+    text = 'concurrency'
+    print(f'Text: {text}')
 
-encrypted_text = hc.encrypt(text)
+    encrypted_text = hc.encrypt(text)
 
-print(encrypted_text)
+    print(f'Encrypted text: {encrypted_text}')
 
-decrypted_text = hc.decrypt(encrypted_text)
-
-print(decrypted_text)
+    decrypted_text = hc.decrypt(encrypted_text)
+    print('-----')
+    print(f'Decryption key: \n{hc.inv_key}')
+    print('-----')
+    print(f'Decrypted text: {decrypted_text}')
