@@ -46,7 +46,7 @@ def split_arr(arr, n):
     '''arr - array of indeces, n - size of portion'''
     ans = []
     for i in range(0, len(arr), n):
-        print(i, n, i + n)
+        # print(i, n, i + n)
         ans.append(arr[i:i + n])
     if len(ans[-1]) < n:
         ans[-1] += [-1 for _ in range(n - len(ans[-1]))]
@@ -67,12 +67,13 @@ k = np.array([
 ])
 y = np.array([], dtype=int)
 for chunk in chunks:
-    print(type(encrypt(k, chunk)[0]))
+    # print(type(encrypt(k, chunk)[0]))
     y = np.append(y, encrypt(k, chunk))
 
 print(y)
 
-print(arr_to_text(y, inv_d))
+encrypted_text = arr_to_text(y, inv_d)
+print(encrypted_text)
 
 
 def matrix_minor(arr, i, j):
@@ -106,4 +107,21 @@ def inv_matrix_mod_n(matrix, mod):
     return (inverse_det * adj) % mod
 
 
-print(inv_matrix_mod_n(k, 29))
+inv_key = inv_matrix_mod_n(k, 29)
+print(inv_key)
+print('text to arr')
+print(text_to_arr(encrypted_text, d))
+encr_chunks = split_arr(text_to_arr(encrypted_text, d), 3)
+
+
+def decrypt(inv_key, y):
+    return np.dot(inv_key, y) % 29
+
+
+deciphered = np.array([], dtype=int)
+for chunk in encr_chunks:
+   deciphered = np.append(deciphered, decrypt(inv_key, chunk))
+
+print(deciphered)
+
+print(arr_to_text(deciphered, inv_d))
