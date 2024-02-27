@@ -1,14 +1,14 @@
 import json
 
 import helpers as hps
-from AffineCipher import AffineCipher
+from AffineCipher import AffineCipher, AffineRecCipher
 import cryptanalysis_helpers as crypta_hps
 
 
 def break_affine(ciphertext, freq_native):
     """
     Алгоритм:
-        1. Перебером всевозможный ключи.
+        1. Перебером всевозможные ключи.
         2. Проведем частотный анализ текстов, полученных при дешифровке с помощью каждой пары ключей
         3. Посчитаем целевую функцию (f=sum(native[i]*text[i]) для каждой пары ключей. (описана в модулее
                 cryptanalysis_helpers.py в ф. cost_function)
@@ -43,8 +43,28 @@ def break_affine(ciphertext, freq_native):
     return best_keys
 
 
-if __name__ == '__main__':
+def break_affine_rec(ciphertext):
+    """
+    Алгоритм:
+        1. перебираем всевозможные ключи.
+        2. Запишем ключи в выходной файл out.txt.
+    """
 
+    b_keys = tuple(key for key in range(hps.ALPHABET_LEN))
+
+    a_keys = tuple(key for key in range(hps.ALPHABET_LEN) if hps.gcd(key, hps.ALPHABET_LEN) == 1)
+    with open('out.txt', 'w') as f:
+        for key_a1 in a_keys:
+            for key_a2 in a_keys:
+                for key_b1 in b_keys:
+                    for key_b2 in b_keys:
+                        arc = AffineRecCipher(key_a1=key_a1, key_a2=key_a2, key_b1=key_b1, key_b2=key_b2)
+                        decrypted_text = arc.decrypt(ciphertext)# здесь по факту используется decryption key, а не key a
+                        f.write(f'POSSIBLE KEYS: a1={key_a1}, b1={key_b1}, a2={key_a2}, b2={key_b2}\n')
+                        f.write(f'POSSIBLE DECRYPTED TEXT: {decrypted_text}\n')
+
+
+if __name__ == '__main__':
     native_freq = json.loads(open('freq_analysis_Crime_And_Punishment.json').read())
 
     text = '''For a long time Raskolnikov did not know of his mother’s death, though
@@ -83,3 +103,14 @@ if __name__ == '__main__':
     print(f'THEREFORE, DECRYPTION KEY A IS {affine_breaker.decryption_key_a} ')
     print(f'DECRYPTED_TEXT: {affine_breaker.decrypt(encrypted_text)[0:50]}...')
 
+    print('-----------------------------')
+    print('BREAK AFFINE RECURRENT CIPHER')
+    text = 'concurrency'
+    affine_rec_cipher = AffineRecCipher()
+    encrypted_text_rec = affine_rec_cipher.encrypt(text)
+    print(f'REAL KEY_A1 {affine_rec_cipher.key_a}')
+    print(f'REAL KEY_A2 {affine_rec_cipher.key_a2}')
+    print(f'REAL KEY_B1 {affine_rec_cipher.key_b}')
+    print(f'REAL KEY_B2 {affine_rec_cipher.key_b2}')
+
+    break_affine_rec(encrypted_text_rec)
