@@ -155,10 +155,10 @@ class HillRecCipher(HillCipherBase):
             else:
                 cur_keys.append((np.dot(cur_keys[-1], cur_keys[-2]) % self.MOD))
                 ans = np.append(ans, self.__encrypt_chunk__(chunk, cur_keys[-1]))
-        #     print('ENC KEY')
-        #     print(cur_keys[-1])
-        #
-        # print(ans)
+            print('ENC KEY')
+            print(cur_keys[-1])
+
+        print(ans)
         return self.arr_to_text(ans)
 
     def decrypt(self, ciphertext: str) -> str:
@@ -179,9 +179,9 @@ class HillRecCipher(HillCipherBase):
                 # print('123213')
                 # print(cur_keys[-1])
                 ans = np.append(ans, self.__decrypt_chunk__(chunk, cur_keys[-1]))
-        #     print('DEC KEY')
-        #     print(cur_keys[-1])
-        # print(ans)
+            print('DEC KEY')
+            print(cur_keys[-1])
+        print(ans)
         return self.arr_to_text(ans)
 
 
@@ -217,16 +217,28 @@ class HillRecCipher(HillCipherBase):
 #     y = np.append(y, encrypt(k, chunk))
 
 
-if __name__ == '__main__':
-    k = np.array([
-        [1, 5, 1],
-        [3, 9, 4],
-        [9, 4, 6]
-    ])
+def rec_example(k1, k2, n, text):
+    print('HILL RECURRENT CIPHER')
+    rhc = HillRecCipher(k1, k2, chunk_len=n)
+    print(f'ENCRYPTION KEY 1:\n{rhc.k1}')
+    # print(rhc.k1)
+    print('-----')
+    # print(rhc.k2)
+    print(f'ENCRYPTION KEY 2:\n{rhc.k2}')
+    print(f'INPUT TEXT IS {text}')
+    print(f'INPUT TEXT IS {rhc.text_to_arr(text)}')
+    enc = rhc.encrypt(text)
+
+    print(f'ENCRYPTED TEXT IS {enc}')
+    print(f'ENCRYPTED TEXT IS {rhc.text_to_arr(enc)}')
+
+    print(f'DECRYPTED TEXT IS {rhc.decrypt(enc)}')
+
+
+def hill_example(k, n, text):
     print(f'ENCRYPTION KEY: \n{k}')
     print('-----')
-    hc = HillCipher(k, 3)
-    text = 'concurrency'
+    hc = HillCipher(k, n)
     print(f'Text: {text}')
 
     encrypted_text = hc.encrypt(text)
@@ -239,8 +251,15 @@ if __name__ == '__main__':
     print('-----')
     print(f'Decrypted text: {decrypted_text}')
 
+
+if __name__ == '__main__':
+    k = np.array([
+        [1, 5, 1],
+        [3, 9, 4],
+        [9, 4, 6]
+    ])
+    hill_example(k, 3, 'concurrency')
     print('-----')
-    print('HILL RECURRENT CIPHER')
     k1 = np.array(
         [
             [4, 8],
@@ -253,34 +272,26 @@ if __name__ == '__main__':
             [1, 3]
         ]
     )
-    rhc = HillRecCipher(k1, k2, 2)
-    print(f'ENCRYPTION KEY 1:\n{rhc.k1}')
-    # print(rhc.k1)
-    print('-----')
-    # print(rhc.k2)
-    print(f'ENCRYPTION KEY 2:\n{rhc.k2}')
-    text = 'symmetry'
-    print(f'INPUT TEXT IS {text}')
-    print(f'INPUT TEXT IS {rhc.text_to_arr(text)}')
-    enc = rhc.encrypt(text)
+    rec_example(k1, k2, 2, 'symmetry')
 
-    print(f'ENCRYPTED TEXT IS {enc}')
-    print(f'ENCRYPTED TEXT IS {rhc.text_to_arr(enc)}')
+    print("EX 2")
+    k = np.array(
+        [[7, 1, 7],
+         [0, 0, 5],
+         [8, 5, 8]]
+    )
 
-    print(f'DECRYPTED TEXT IS {rhc.decrypt(enc)}')
-
-    print(np.array(
-      [
-          [27, 10, 7],
-          [21, 23, 15],
-          [3, 22, 26],
-      ]
-    )@hc.inv_matrix_mod_n(
-        np.array(
-            [
-                [2, 14, 13],
-                [17, 4, 13],
-                [2, 20, 17],
-            ]
-        )
-    ) % 29)
+    hill_example(k, 3, "approve")
+    k1 = np.array(
+        [
+            [1, 5],
+            [4, 0]
+        ]
+    )
+    k2 = np.array(
+        [
+            [1, 6],
+            [5, 8]
+        ]
+    )
+    rec_example(k1, k2, 2, 'constant')
